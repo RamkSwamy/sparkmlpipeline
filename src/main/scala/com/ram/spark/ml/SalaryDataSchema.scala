@@ -1,4 +1,4 @@
-package com.madhukaraphatak.spark.ml
+package com.ram.spark.ml
 
 import org.apache.spark.sql.SparkSession
 import Utils._
@@ -15,7 +15,7 @@ object SalaryDataSchema {
           .appName("example")
           .getOrCreate()
 
-    val salaryDF = loadSalaryCsv(sparkSession,filePath)
+    val salaryDF = loadSalaryCsvTrain(sparkSession,filePath)
 
     salaryDF.printSchema()
 
