@@ -5,6 +5,7 @@ import org.apache.spark.ml.classification.{LogisticRegression, LogisticRegressio
 import org.apache.spark.ml.tuning.{CrossValidator, ParamGridBuilder}
 import org.apache.spark.sql.SparkSession
 import Utils._
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator
 import org.apache.spark.ml.param.ParamMap
 
@@ -20,7 +21,7 @@ object SalaryCrossValidator {
       .appName("example")
       .getOrCreate()
 
-    val trainDF = loadSalaryCsvTrain(sparkSession,filePath)
+    val trainDF = loadSalaryCsvTrain(sparkSession,filePathTrain)
 
     val testDF = loadSalaryCsvTest(sparkSession,filePathTest)
 
@@ -28,10 +29,14 @@ object SalaryCrossValidator {
 
     testDF.cache()
 
+    val rootLogger = Logger.getRootLogger()
+    rootLogger.setLevel(Level.ERROR)
+
     val lr = new LogisticRegression()
 
     val pipelineStagesWithAssembler = buildDataPrepPipeLine(sparkSession)
 
+    //adding LogisticRegression estimator to the pipeline
     val pipelineWitLR = new Pipeline().setStages(pipelineStagesWithAssembler ++ Array(lr))
 
 

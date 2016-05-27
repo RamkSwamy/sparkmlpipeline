@@ -1,6 +1,7 @@
 package com.ram.spark.ml
 
 import Utils._
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.ml.feature.{OneHotEncoder, StringIndexer}
 import org.apache.spark.sql.SparkSession
 
@@ -11,12 +12,20 @@ object CategoricalForWorkClass {
 
   def main(args: Array[String]) {
 
+    //SparkSession is the new entry point to programming Spark with the Dataset and DataFrame API’s
+    //It encompasses SQLContext, SparkContext etc.,
+
     val sparkSession = SparkSession.builder.
       master("local")
       .appName("example")
       .getOrCreate()
 
-    val salaryDF = loadSalaryCsvTrain(sparkSession,filePath)
+    val salaryDF = loadSalaryCsvTrain(sparkSession,filePathTrain)
+
+    val rootLogger = Logger.getRootLogger()
+    rootLogger.setLevel(Level.ERROR)
+
+
 
     val stringIndexer = new StringIndexer()
     //specify options
@@ -37,8 +46,7 @@ object CategoricalForWorkClass {
     val oneHotEncodedDF = oneHotEncoder.transform(indexedDF)
 
     // show one hot encoding
-    oneHotEncodedDF.select("workclass","workclass_index","workclass_onehotindex").show()
-
+    oneHotEncodedDF.select("workclass","workclass_index","workclass_onehotindex").show(truncate = false)
   }
 
 }

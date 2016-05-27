@@ -19,7 +19,7 @@ object LRTraining {
       .appName("example")
       .getOrCreate()
 
-    val salaryDF = loadSalaryCsvTrain(sparkSession,filePath)
+    val salaryDF = loadSalaryCsvTrain(sparkSession,filePathTrain)
 
     val pipelineStagesWithAssembler = buildDataPrepPipeLine(sparkSession)
 
@@ -33,11 +33,12 @@ object LRTraining {
       .setMaxIter(10)
       .setRegParam(0.01)
 
+
     val model = lr.fit(featurisedDF)
 
     println(model.intercept+ " "+model.coefficients)
 
-    model.save("/tmp/lrmodel")
+    model.save("/tmp/lrmodelstore")
 
   }
 

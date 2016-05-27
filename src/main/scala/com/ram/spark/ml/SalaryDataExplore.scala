@@ -2,6 +2,7 @@ package com.ram.spark.ml
 
 import org.apache.spark.sql.SparkSession
 import Utils._
+import org.apache.log4j.{Level, Logger}
 
 
 /**
@@ -16,11 +17,14 @@ object SalaryDataExplore {
       .appName("example")
       .getOrCreate()
 
-    val salaryDF = loadSalaryCsvTrain(sparkSession,filePath)
+    val salaryDF = loadSalaryCsvTrain(sparkSession,filePathTrain)
+
+    val rootLogger = Logger.getRootLogger()
+    rootLogger.setLevel(Level.ERROR)
 
     val resultSet = salaryDF.count()
     //total records or rows in the file => no of observations
-    println("Total no of obsevations" +resultSet)
+    println("Total no of obsevations: " +resultSet)
     salaryDF.show(50)
 
     //describe

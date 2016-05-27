@@ -9,7 +9,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
   */
 object Utils {
 
-  val filePath = "src/main/resources/adult.data"
+  val filePathTrain = "src/main/resources/adult.data"
   val filePathTest = "src/main/resources/adult.test"
 
   def loadSalaryCsvTrain(sparkSession:SparkSession, path:String):DataFrame = {
@@ -45,11 +45,11 @@ object Utils {
     val educationPipelineStages = buildOneHotPipeLine("education")
     val occupationPipelineStages = buildOneHotPipeLine("occupation")
     val martialSatusStages = buildOneHotPipeLine("marital_status")
-    val raltionshipStages = buildOneHotPipeLine("relationship")
+    val relationshipStages = buildOneHotPipeLine("relationship")
     val sexStages = buildOneHotPipeLine("sex")
 
     Array.concat(workClassPipeLineStages,educationPipelineStages,martialSatusStages,
-                 occupationPipelineStages,raltionshipStages,sexStages)
+                 occupationPipelineStages,relationshipStages,sexStages)
 
   }
 
@@ -67,6 +67,7 @@ object Utils {
 
     val pipelineStagesforFeatures = Utils.buildPipeLineForFeaturePreparation(sparkSession)
 
+    //Here we are using some numerical variables(ordinal) directly
     val assembler = new VectorAssembler()
       .setInputCols(Array("workclass_onehotindex", "occupation_onehotindex", "relationship_onehotindex",
         "marital_status_onehotindex","sex_onehotindex","age","education_num","hours_per_week"))

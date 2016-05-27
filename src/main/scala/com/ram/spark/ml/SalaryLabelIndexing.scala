@@ -2,6 +2,7 @@ package com.ram.spark.ml
 
 import org.apache.spark.sql.SparkSession
 import Utils._
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.ml.feature.StringIndexer
 
 /**
@@ -16,7 +17,9 @@ object SalaryLabelIndexing {
           .appName("example")
           .getOrCreate()
 
-    val salaryDF = loadSalaryCsvTrain(sparkSession,filePath)
+    val salaryDF = loadSalaryCsvTrain(sparkSession,filePathTrain)
+    val rootLogger = Logger.getRootLogger()
+    rootLogger.setLevel(Level.ERROR)
 
     val labelIndexer = new StringIndexer()
     //specify options
