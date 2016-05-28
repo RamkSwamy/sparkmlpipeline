@@ -21,15 +21,17 @@ object SalaryLabelIndexing {
     val rootLogger = Logger.getRootLogger()
     rootLogger.setLevel(Level.ERROR)
 
+    //Estimator
     val labelIndexer = new StringIndexer()
     //specify options
     labelIndexer.setInputCol("salary")
     labelIndexer.setOutputCol("salary_index")
 
+    //Model
     val labelIndexerTransformer = labelIndexer.fit(salaryDF)
     println("labels are "+ labelIndexerTransformer.labels.toList)
 
-    // show transformed dataframe
+    //transformed data
     val transformedDF = labelIndexerTransformer.transform(salaryDF)
     transformedDF.select("salary","salary_index").show()
 

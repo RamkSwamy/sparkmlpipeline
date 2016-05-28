@@ -24,21 +24,20 @@ object CategoricalForWorkClass {
 
     val rootLogger = Logger.getRootLogger()
     rootLogger.setLevel(Level.ERROR)
-
-
-
+    //pre-processing
+    //Estimator
     val stringIndexer = new StringIndexer()
     //specify options
     stringIndexer.setInputCol("workclass")
     stringIndexer.setOutputCol("workclass_index")
-
+    //Model
     val stringIndexerTransformer = stringIndexer.fit(salaryDF)
     println(s"labels for work class are ${stringIndexerTransformer.labels.toList} ")
-
-    //run One hot encoding
-
+    //transform
     val indexedDF = stringIndexerTransformer.transform(salaryDF)
 
+    //run One hot encoding
+    //Transformer
     val oneHotEncoder = new OneHotEncoder()
     oneHotEncoder.setInputCol("workclass_index")
     oneHotEncoder.setOutputCol("workclass_onehotindex")

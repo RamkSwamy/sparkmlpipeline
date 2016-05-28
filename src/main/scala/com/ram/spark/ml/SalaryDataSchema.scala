@@ -18,7 +18,7 @@ object SalaryDataSchema {
           .getOrCreate()
 
     val salaryDF = loadSalaryCsvTrain(sparkSession,filePathTrain)
-
+    //Understand the structure(schema) of the data
     salaryDF.printSchema()
 
   }

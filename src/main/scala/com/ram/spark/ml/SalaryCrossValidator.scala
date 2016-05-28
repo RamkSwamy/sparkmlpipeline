@@ -47,22 +47,27 @@ object SalaryCrossValidator {
 
     val evaluator = new BinaryClassificationEvaluator()
 
+    //Cross Validation Estimator is constructed
 
     val crossValidator = new CrossValidator()
       .setEstimator(pipelineWitLR)
       .setEstimatorParamMaps(paramGrid)
       .setNumFolds(5)
       .setEvaluator(evaluator)
-    val crossValidatorModel = crossValidator.fit(trainDF)
 
+    //Model is created
+    val crossValidatorModel = crossValidator.fit(trainDF)
+    //Model used to Predict
     val newPredictions = crossValidatorModel.transform(testDF)
 
+    //Evaluate the Model
     val evaluatorParamMap = ParamMap(evaluator.metricName -> "areaUnderROC")
 
     val newAucTest = evaluator.evaluate(newPredictions, evaluatorParamMap)
     println("new AUC (with Cross Validation) " + newAucTest)
     val bestModel = crossValidatorModel.bestModel
 
+    //Understand the Model selected
     println()
     println("Parameters for Best Model:")
 

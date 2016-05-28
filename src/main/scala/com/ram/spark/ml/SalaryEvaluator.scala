@@ -28,28 +28,30 @@ object SalaryEvaluator {
     val rootLogger = Logger.getRootLogger()
     rootLogger.setLevel(Level.ERROR)
 
-    //build and execute the pipeline to prepare the data
-    //to feed to Logistc Regression model to predict
+   //Build pipeline Estimator
     val pipelineStagesWithAssembler = buildDataPrepPipeLine(sparkSession)
 
     val pipeline = new Pipeline().setStages(pipelineStagesWithAssembler)
 
+    //Model generated and used to prepare data for LR
     val featurisedDFTrain = pipeline.fit(trainDF).transform(trainDF)
 
     val featurisedDFTest = pipeline.fit(testDF).transform(testDF)
 
+    //Load the saved LR model
     val model = LogisticRegressionModel.load("/tmp/lrmodelstore")
 
 
 
-    //predict
+    //predict using LR model using the prepared data thru the pipeline
 
     val testPredictions = model.transform(featurisedDFTest)
     val trainingPredictions = model.transform(featurisedDFTrain)
 
+    //Let’s now evaluate our model using Area under ROC as a metric.
 
     val evaluator = new BinaryClassificationEvaluator()
-    //Let’s now evaluate our model using Area under ROC as a metric.
+
 
     val evaluatorParamMap = ParamMap(evaluator.metricName -> "areaUnderROC")
     val aucTraining = evaluator.evaluate(trainingPredictions, evaluatorParamMap)

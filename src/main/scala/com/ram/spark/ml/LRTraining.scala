@@ -21,10 +21,11 @@ object LRTraining {
 
     val salaryDF = loadSalaryCsvTrain(sparkSession,filePathTrain)
 
+    //pipeline Estimator
     val pipelineStagesWithAssembler = buildDataPrepPipeLine(sparkSession)
 
     val pipeline = new Pipeline().setStages(pipelineStagesWithAssembler)
-
+    //pipeline model for preparing data for LR
     val featurisedDF = pipeline.fit(salaryDF).transform(salaryDF)
 
     featurisedDF.select("features","label").show(truncate = false)
@@ -33,7 +34,7 @@ object LRTraining {
       .setMaxIter(10)
       .setRegParam(0.01)
 
-
+    //Logistic Regression Model
     val model = lr.fit(featurisedDF)
 
     println(model.intercept+ " "+model.coefficients)

@@ -29,7 +29,7 @@ object SalaryDataExplore {
 
     //describe
     salaryDF.describe("age","education_num","hours_per_week").show()
-
+    //similar to confusion matrix
     salaryDF.stat.crosstab("sex","salary").show()
 
     val salaryGroup50K = salaryDF.groupBy("salary").count()
